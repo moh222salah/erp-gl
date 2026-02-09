@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Advanced Account Statement Analytics for ERPNext - Professional Financial Management System">
+    <meta name="keywords" content="ERPNext, Financial System, Account Statement, Analytics, Business Intelligence">
+    <meta name="author" content="Mohammed Salah">
+    
+    <title>ERPNext Financial System | Advanced Analytics Platform</title>
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💼</text></svg>">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2E86AB;
+            --primary-light: #3A9FC2;
+            --secondary: #A23B72;
+            --accent: #F18F01;
+            --success: #6A994E;
+            --danger: #C73E1D;
+            
+            --bg-gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            --shadow-hover: 0 12px 48px rgba(31, 38, 135, 0.25);
+        }
+
+        [data-theme="dark"] {
+            --glass-bg: rgba(0, 0, 0, 0.2);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #f7fafc;
+            --text-secondary: #e2e8f0;
+            --bg-gradient-1: linear-gradient(135deg, #434343 0%, #000000 100%);
+            --bg-gradient-2: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-gradient-1);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Animated Background Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
+            33% { transform: translateY(-100px) translateX(50px) rotate(120deg); }
+            66% { transform: translateY(-50px) translateX(-50px) rotate(240deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 5%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: var(--shadow);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .theme-toggle, .lang-toggle {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover, .lang-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 6rem 5% 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            line-height: 1.8;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            box-shadow: 0 4px 20px rgba(46, 134, 171, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(46, 134, 171, 0.5);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            color: var(--text-primary);
+            border: 2px solid var(--glass-border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 4rem 5%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+        }
+
+        .stats-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .stat-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Timeline Section */
+        .timeline {
+            padding: 6rem 5%;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 4rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .timeline-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline-item {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 2rem;
+            margin-bottom: 4rem;
+            align-items: center;
+        }
+
+        .timeline-content {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .timeline-content:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .timeline-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .timeline-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .timeline-description {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 5%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+        }
+
+        .features-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .feature-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .feature-description {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        /* Tech Stack */
+        .tech-stack {
+            padding: 6rem 5%;
+        }
+
+        .tech-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+        }
+
+        .tech-item {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .tech-item:hover {
+            transform: translateY(-10px) rotate(5deg);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .tech-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .tech-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 6rem 5%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta-description {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            line-height: 1.8;
+        }
+
+        .cta-buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .cta-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+        }
+
+        .cta-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        }
+
+        .cta-card:hover * {
+            color: white !important;
+        }
+
+        .cta-card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .cta-card-subtitle {
+            color: var(--text-secondary);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            padding: 4rem 5% 2rem;
+            color: var(--text-primary);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 80%;
+                height: calc(100vh - 70px);
+                background: var(--glass-bg);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 2rem;
+                transition: left 0.3s ease;
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .timeline-item {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline-item:nth-child(even) .timeline-content:first-child {
+                order: 2;
+            }
+
+            .hero {
+                padding: 5rem 5% 3rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            font-size: 2rem;
+            color: var(--text-secondary);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-20px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Animated Background -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Navigation -->
+    <nav id="nav">
+        <div class="nav-container">
+            <div class="logo">
+                <span>💼</span>
+                <span data-translate="logo">ERPNext Financial</span>
+            </div>
+            
+            <button class="mobile-menu-toggle" id="menuToggle">☰</button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home" data-translate="nav.home">Home</a></li>
+                <li><a href="#features" data-translate="nav.features">Features</a></li>
+                <li><a href="#timeline" data-translate="nav.timeline">Process</a></li>
+                <li><a href="#tech" data-translate="nav.tech">Technology</a></li>
+                <li><a href="#contact" data-translate="nav.contact">Contact</a></li>
+                <li><button class="theme-toggle" id="themeToggle">🌙</button></li>
+                <li><button class="lang-toggle" id="langToggle">ع / EN</button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1 data-translate="hero.title">ERPNext Financial System</h1>
+            <p class="hero-subtitle" data-translate="hero.subtitle">Advanced Account Statement Analytics</p>
+            <p class="hero-description" data-translate="hero.description">
+                Transform your financial management with intelligent automation, real-time analytics, 
+                and comprehensive reporting. Built for businesses across Egypt and the Gulf region.
+            </p>
+            <div class="cta-buttons">
+                <a href="#features" class="btn btn-primary">
+                    <span data-translate="hero.explore">Explore Features</span>
+                    <span>→</span>
+                </a>
+                <a href="#contact" class="btn btn-secondary">
+                    <span data-translate="hero.getStarted">Get Started</span>
+                </a>
+            </div>
+        </div>
+        <div class="scroll-indicator">↓</div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-container">
+            <div class="stat-card fade-in">
+                <div class="stat-icon">💰</div>
+                <div class="stat-number" data-count="1081100">0</div>
+                <div class="stat-label" data-translate="stats.debit">Total Debit</div>
+            </div>
+            <div class="stat-card fade-in">
+                <div class="stat-icon">💳</div>
+                <div class="stat-number" data-count="890475">0</div>
+                <div class="stat-label" data-translate="stats.credit">Total Credit</div>
+            </div>
+            <div class="stat-card fade-in">
+                <div class="stat-icon">📊</div>
+                <div class="stat-number" data-count="190625">0</div>
+                <div class="stat-label" data-translate="stats.balance">Net Balance</div>
+            </div>
+            <div class="stat-card fade-in">
+                <div class="stat-icon">📈</div>
+                <div class="stat-number" data-count="25">0</div>
+                <div class="stat-label" data-translate="stats.transactions">Transactions</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section class="timeline" id="timeline">
+        <h2 class="section-title" data-translate="timeline.title">How It Works</h2>
+        <div class="timeline-container">
+            <div class="timeline-item fade-in">
+                <div class="timeline-content">
+                    <h3 class="timeline-title" data-translate="timeline.step1.title">1. Data Collection</h3>
+                    <p class="timeline-description" data-translate="timeline.step1.description">
+                        Automatically gather financial transactions from all sources including invoices, 
+                        payments, and journal entries.
+                    </p>
+                </div>
+                <div class="timeline-icon">📥</div>
+                <div></div>
+            </div>
+
+            <div class="timeline-item fade-in">
+                <div></div>
+                <div class="timeline-icon">⚙️</div>
+                <div class="timeline-content">
+                    <h3 class="timeline-title" data-translate="timeline.step2.title">2. Smart Processing</h3>
+                    <p class="timeline-description" data-translate="timeline.step2.description">
+                        Intelligent algorithms process and categorize transactions with automatic 
+                        reconciliation and balance calculations.
+                    </p>
+                </div>
+            </div>
+
+            <div class="timeline-item fade-in">
+                <div class="timeline-content">
+                    <h3 class="timeline-title" data-translate="timeline.step3.title">3. Analytics & Insights</h3>
+                    <p class="timeline-description" data-translate="timeline.step3.description">
+                        Generate comprehensive reports with real-time analytics, trends, and 
+                        actionable business intelligence.
+                    </p>
+                </div>
+                <div class="timeline-icon">📊</div>
+                <div></div>
+            </div>
+
+            <div class="timeline-item fade-in">
+                <div></div>
+                <div class="timeline-icon">🎯</div>
+                <div class="timeline-content">
+                    <h3 class="timeline-title" data-translate="timeline.step4.title">4. Automated Delivery</h3>
+                    <p class="timeline-description" data-translate="timeline.step4.description">
+                        Scheduled reports delivered automatically via email with export options 
+                        in PDF, Excel, and CSV formats.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <h2 class="section-title" data-translate="features.title">Powerful Features</h2>
+        <div class="features-grid">
+            <div class="feature-card fade-in">
+                <span class="feature-icon">⚡</span>
+                <h3 class="feature-title" data-translate="features.realtime.title">Real-time Analytics</h3>
+                <p class="feature-description" data-translate="features.realtime.description">
+                    Monitor financial data in real-time with live dashboards and instant notifications.
+                </p>
+            </div>
+
+            <div class="feature-card fade-in">
+                <span class="feature-icon">🌍</span>
+                <h3 class="feature-title" data-translate="features.multilingual.title">Multi-language Support</h3>
+                <p class="feature-description" data-translate="features.multilingual.description">
+                    Full Arabic and English interfaces designed for Middle East and Gulf businesses.
+                </p>
+            </div>
+
+            <div class="feature-card fade-in">
+                <span class="feature-icon">💱</span>
+                <h3 class="feature-title" data-translate="features.currency.title">Multi-currency</h3>
+                <p class="feature-description" data-translate="features.currency.description">
+                    Handle multiple currencies with automatic exchange rate updates and conversions.
+                </p>
+            </div>
+
+            <div class="feature-card fade-in">
+                <span class="feature-icon">📱</span>
+                <h3 class="feature-title" data-translate="features.mobile.title">Mobile Ready</h3>
+                <p class="feature-description" data-translate="features.mobile.description">
+                    Access your financial data anywhere with responsive design and mobile apps.
+                </p>
+            </div>
+
+            <div class="feature-card fade-in">
+                <span class="feature-icon">🔒</span>
+                <h3 class="feature-title" data-translate="features.security.title">Enterprise Security</h3>
+                <p class="feature-description" data-translate="features.security.description">
+                    Bank-level security with encryption, role-based access, and audit trails.
+                </p>
+            </div>
+
+            <div class="feature-card fade-in">
+                <span class="feature-icon">📈</span>
+                <h3 class="feature-title" data-translate="features.reports.title">Advanced Reports</h3>
+                <p class="feature-description" data-translate="features.reports.description">
+                    Comprehensive financial statements, aging reports, and custom analytics.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack -->
+    <section class="tech-stack" id="tech">
+        <h2 class="section-title" data-translate="tech.title">Technology Stack</h2>
+        <div class="tech-grid">
+            <div class="tech-item fade-in">
+                <div class="tech-icon">🐍</div>
+                <div class="tech-name">Python</div>
+            </div>
+            <div class="tech-item fade-in">
+                <div class="tech-icon">📦</div>
+                <div class="tech-name">ERPNext</div>
+            </div>
+            <div class="tech-item fade-in">
+                <div class="tech-icon">🗄️</div>
+                <div class="tech-name">MariaDB</div>
+            </div>
+            <div class="tech-item fade-in">
+                <div class="tech-icon">⚙️</div>
+                <div class="tech-name">Frappe</div>
+            </div>
+            <div class="tech-item fade-in">
+                <div class="tech-icon">📊</div>
+                <div class="tech-name">Pandas</div>
+            </div>
+            <div class="tech-item fade-in">
+                <div class="tech-icon">🔄</div>
+                <div class="tech-name">Redis</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="contact">
+        <div class="cta-content">
+            <h2 class="cta-title" data-translate="cta.title">Ready to Transform Your Business?</h2>
+            <p class="cta-description" data-translate="cta.description">
+                Get in touch to discuss how ERPNext Financial System can streamline your operations 
+                and provide valuable insights for your business growth.
+            </p>
+            
+            <div class="cta-buttons-grid">
+                <a href="https://moh222salah.github.io/cv" target="_blank" class="cta-card">
+                    <div class="cta-card-icon">💼</div>
+                    <h3 class="cta-card-title" data-translate="cta.portfolio.title">View Portfolio</h3>
+                    <p class="cta-card-subtitle" data-translate="cta.portfolio.subtitle">See my previous work</p>
+                </a>
+                
+                <a href="https://wa.me/201113903070" target="_blank" class="cta-card">
+                    <div class="cta-card-icon">💬</div>
+                    <h3 class="cta-card-title" data-translate="cta.whatsapp.title">WhatsApp Chat</h3>
+                    <p class="cta-card-subtitle" data-translate="cta.whatsapp.subtitle">Let's discuss your project</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3 data-translate="footer.product.title">Product</h3>
+                <ul class="footer-links">
+                    <li><a href="#features" data-translate="footer.product.features">Features</a></li>
+                    <li><a href="#timeline" data-translate="footer.product.process">Process</a></li>
+                    <li><a href="#tech" data-translate="footer.product.technology">Technology</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3 data-translate="footer.company.title">Company</h3>
+                <ul class="footer-links">
+                    <li><a href="https://moh222salah.github.io/cv" target="_blank" data-translate="footer.company.about">About</a></li>
+                    <li><a href="#contact" data-translate="footer.company.contact">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3 data-translate="footer.resources.title">Resources</h3>
+                <ul class="footer-links">
+                    <li><a href="https://github.com/moh222salah/erp-statement" target="_blank" data-translate="footer.resources.documentation">Documentation</a></li>
+                    <li><a href="https://github.com/moh222salah/erp-statement" target="_blank" data-translate="footer.resources.github">GitHub</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3 data-translate="footer.connect.title">Connect</h3>
+                <ul class="footer-links">
+                    <li><a href="https://wa.me/201113903070" target="_blank">WhatsApp</a></li>
+                    <li><a href="https://github.com/moh222salah" target="_blank">GitHub</a></li>
+                    <li><a href="https://linkedin.com/in/moh222salah" target="_blank">LinkedIn</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p data-translate="footer.copyright">© 2025 ERPNext Financial System. Built with ❤️ by Mohammed Salah</p>
+        </div>
+    </footer>
+
+    <script>
+        // Translations
+        const translations = {
+            en: {
+                logo: "ERPNext Financial",
+                nav: {
+                    home: "Home",
+                    features: "Features",
+                    timeline: "Process",
+                    tech: "Technology",
+                    contact: "Contact"
+                },
+                hero: {
+                    title: "ERPNext Financial System",
+                    subtitle: "Advanced Account Statement Analytics",
+                    description: "Transform your financial management with intelligent automation, real-time analytics, and comprehensive reporting. Built for businesses across Egypt and the Gulf region.",
+                    explore: "Explore Features",
+                    getStarted: "Get Started"
+                },
+                stats: {
+                    debit: "Total Debit",
+                    credit: "Total Credit",
+                    balance: "Net Balance",
+                    transactions: "Transactions"
+                },
+                timeline: {
+                    title: "How It Works",
+                    step1: {
+                        title: "1. Data Collection",
+                        description: "Automatically gather financial transactions from all sources including invoices, payments, and journal entries."
+                    },
+                    step2: {
+                        title: "2. Smart Processing",
+                        description: "Intelligent algorithms process and categorize transactions with automatic reconciliation and balance calculations."
+                    },
+                    step3: {
+                        title: "3. Analytics & Insights",
+                        description: "Generate comprehensive reports with real-time analytics, trends, and actionable business intelligence."
+                    },
+                    step4: {
+                        title: "4. Automated Delivery",
+                        description: "Scheduled reports delivered automatically via email with export options in PDF, Excel, and CSV formats."
+                    }
+                },
+                features: {
+                    title: "Powerful Features",
+                    realtime: {
+                        title: "Real-time Analytics",
+                        description: "Monitor financial data in real-time with live dashboards and instant notifications."
+                    },
+                    multilingual: {
+                        title: "Multi-language Support",
+                        description: "Full Arabic and English interfaces designed for Middle East and Gulf businesses."
+                    },
+                    currency: {
+                        title: "Multi-currency",
+                        description: "Handle multiple currencies with automatic exchange rate updates and conversions."
+                    },
+                    mobile: {
+                        title: "Mobile Ready",
+                        description: "Access your financial data anywhere with responsive design and mobile apps."
+                    },
+                    security: {
+                        title: "Enterprise Security",
+                        description: "Bank-level security with encryption, role-based access, and audit trails."
+                    },
+                    reports: {
+                        title: "Advanced Reports",
+                        description: "Comprehensive financial statements, aging reports, and custom analytics."
+                    }
+                },
+                tech: {
+                    title: "Technology Stack"
+                },
+                cta: {
+                    title: "Ready to Transform Your Business?",
+                    description: "Get in touch to discuss how ERPNext Financial System can streamline your operations and provide valuable insights for your business growth.",
+                    portfolio: {
+                        title: "View Portfolio",
+                        subtitle: "See my previous work"
+                    },
+                    whatsapp: {
+                        title: "WhatsApp Chat",
+                        subtitle: "Let's discuss your project"
+                    }
+                },
+                footer: {
+                    product: {
+                        title: "Product",
+                        features: "Features",
+                        process: "Process",
+                        technology: "Technology"
+                    },
+                    company: {
+                        title: "Company",
+                        about: "About",
+                        contact: "Contact"
+                    },
+                    resources: {
+                        title: "Resources",
+                        documentation: "Documentation",
+                        github: "GitHub"
+                    },
+                    connect: {
+                        title: "Connect"
+                    },
+                    copyright: "© 2025 ERPNext Financial System. Built with ❤️ by Mohammed Salah"
+                }
+            },
+            ar: {
+                logo: "نظام ERPNext المالي",
+                nav: {
+                    home: "الرئيسية",
+                    features: "المميزات",
+                    timeline: "آلية العمل",
+                    tech: "التقنيات",
+                    contact: "التواصل"
+                },
+                hero: {
+                    title: "نظام ERPNext المالي",
+                    subtitle: "تحليلات متقدمة لكشوف الحسابات",
+                    description: "حوّل إدارتك المالية مع الأتمتة الذكية والتحليلات الفورية والتقارير الشاملة. مصمم خصيصاً للشركات في مصر ودول الخليج.",
+                    explore: "استكشف المميزات",
+                    getStarted: "ابدأ الآن"
+                },
+                stats: {
+                    debit: "إجمالي المدين",
+                    credit: "إجمالي الدائن",
+                    balance: "الرصيد الصافي",
+                    transactions: "المعاملات"
+                },
+                timeline: {
+                    title: "آلية العمل",
+                    step1: {
+                        title: "١. جمع البيانات",
+                        description: "جمع المعاملات المالية تلقائياً من جميع المصادر بما في ذلك الفواتير والمدفوعات والقيود اليومية."
+                    },
+                    step2: {
+                        title: "٢. المعالجة الذكية",
+                        description: "خوارزميات ذكية تعالج وتصنف المعاملات مع التسوية التلقائية وحساب الأرصدة."
+                    },
+                    step3: {
+                        title: "٣. التحليلات والرؤى",
+                        description: "إنشاء تقارير شاملة مع تحليلات فورية واتجاهات وذكاء أعمال قابل للتنفيذ."
+                    },
+                    step4: {
+                        title: "٤. التسليم التلقائي",
+                        description: "تقارير مجدولة تُرسل تلقائياً عبر البريد الإلكتروني مع خيارات تصدير بصيغ PDF وExcel وCSV."
+                    }
+                },
+                features: {
+                    title: "مميزات قوية",
+                    realtime: {
+                        title: "تحليلات فورية",
+                        description: "راقب البيانات المالية في الوقت الفعلي مع لوحات معلومات حية وإشعارات فورية."
+                    },
+                    multilingual: {
+                        title: "دعم متعدد اللغات",
+                        description: "واجهات كاملة بالعربية والإنجليزية مصممة لشركات الشرق الأوسط والخليج."
+                    },
+                    currency: {
+                        title: "متعدد العملات",
+                        description: "التعامل مع عملات متعددة مع تحديثات تلقائية لأسعار الصرف والتحويلات."
+                    },
+                    mobile: {
+                        title: "جاهز للموبايل",
+                        description: "الوصول إلى بياناتك المالية في أي مكان مع تصميم متجاوب وتطبيقات موبايل."
+                    },
+                    security: {
+                        title: "أمان على مستوى المؤسسات",
+                        description: "أمان بمستوى البنوك مع التشفير والوصول المبني على الأدوار وسجلات التدقيق."
+                    },
+                    reports: {
+                        title: "تقارير متقدمة",
+                        description: "قوائم مالية شاملة وتقارير أعمار وتحليلات مخصصة."
+                    }
+                },
+                tech: {
+                    title: "التقنيات المستخدمة"
+                },
+                cta: {
+                    title: "جاهز لتحويل أعمالك؟",
+                    description: "تواصل معنا لمناقشة كيف يمكن لنظام ERPNext المالي تبسيط عملياتك وتوفير رؤى قيمة لنمو أعمالك.",
+                    portfolio: {
+                        title: "عرض الأعمال",
+                        subtitle: "شاهد أعمالي السابقة"
+                    },
+                    whatsapp: {
+                        title: "محادثة واتساب",
+                        subtitle: "دعنا نناقش مشروعك"
+                    }
+                },
+                footer: {
+                    product: {
+                        title: "المنتج",
+                        features: "المميزات",
+                        process: "آلية العمل",
+                        technology: "التقنيات"
+                    },
+                    company: {
+                        title: "الشركة",
+                        about: "عن",
+                        contact: "التواصل"
+                    },
+                    resources: {
+                        title: "الموارد",
+                        documentation: "التوثيق",
+                        github: "GitHub"
+                    },
+                    connect: {
+                        title: "تواصل"
+                    },
+                    copyright: "© 2025 نظام ERPNext المالي. صُنع بـ ❤️ بواسطة محمد صلاح"
+                }
+            }
+        };
+
+        // Detect browser language
+        let currentLang = navigator.language.startsWith('ar') ? 'ar' : 'en';
+        
+        // Apply translations
+        function applyTranslations(lang) {
+            currentLang = lang;
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const keys = element.getAttribute('data-translate').split('.');
+                let translation = translations[lang];
+                
+                for (const key of keys) {
+                    translation = translation[key];
+                }
+                
+                element.textContent = translation;
+            });
+        }
+
+        // Initialize
+        window.addEventListener('load', () => {
+            // Hide loading screen
+            setTimeout(() => {
+                document.getElementById('loading').classList.add('hidden');
+            }, 1000);
+
+            // Apply initial language
+            applyTranslations(currentLang);
+
+            // Create particles
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.width = Math.random() * 5 + 2 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = Math.random() * 20 + 10 + 's';
+                particlesContainer.appendChild(particle);
+            }
+
+            // Intersection Observer for fade-in animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+            // Animated counters
+            const animateCounter = (element) => {
+                const target = parseInt(element.getAttribute('data-count'));
+                const duration = 2000;
+                const increment = target / (duration / 16);
+                let current = 0;
+
+                const updateCounter = () => {
+                    current += increment;
+                    if (current < target) {
+                        element.textContent = Math.floor(current).toLocaleString();
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        element.textContent = target.toLocaleString();
+                    }
+                };
+
+                updateCounter();
+            };
+
+            const statsObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const counter = entry.target.querySelector('[data-count]');
+                        if (counter && !counter.classList.contains('counted')) {
+                            counter.classList.add('counted');
+                            animateCounter(counter);
+                        }
+                    }
+                });
+            });
+
+            document.querySelectorAll('.stat-card').forEach(card => statsObserver.observe(card));
+        });
+
+        // Theme toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        let isDark = prefersDark;
+
+        if (isDark) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeToggle.textContent = '☀️';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            isDark = !isDark;
+            document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+            themeToggle.textContent = isDark ? '☀️' : '🌙';
+        });
+
+        // Language toggle
+        document.getElementById('langToggle').addEventListener('click', () => {
+            currentLang = currentLang === 'en' ? 'ar' : 'en';
+            applyTranslations(currentLang);
+        });
+
+        // Mobile menu
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            menuToggle.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+        });
+
+        // Close menu on link click
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                menuToggle.textContent = '☰';
+            });
+        });
+
+        // Scroll effects
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
